@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCalc - Personal Carbon Footprint Tracker</title>
+    <style>
+        /* --- यहाँ आपका पूरा CSS (डिज़ाइन) है --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .calculator-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #2d6a4f;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+        .input-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 0.9rem;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        input:focus {
+            border-color: #52b788;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background-color: #1b4332;
+        }
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            border-left: 5px solid #2d6a4f;
+        }
+        .hidden {
+            display: none;
+        }
+        #co2-value {
+            color: #d90429;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-container">
+        <h1>🌱 EcoCalc</h1>
+        <p>Calculate your daily carbon footprint and save the planet.</p>
+        
+        <form id="calc-form">
+            <div class="input-group">
+                <label for="transport">Private Vehicle Travel (KM per day):</label>
+                <input type="number" id="transport" min="0" placeholder="e.g., 15" required>
+            </div>
+
+            <div class="input-group">
+                <label for="electricity">Electricity Consumption (Units per day):</label>
+                <input type="number" id="electricity" min="0" placeholder="e.g., 5" required>
+            </div>
+
+            <div class="input-group">
+                <label for="meals">Number of Meat-based Meals (per day):</label>
+                <input type="number" id="meals" min="0" placeholder="e.g., 2" required>
+            </div>
+
+            <button type="button" onclick="calculateCarbon()">Calculate Footprint</button>
+        </form>
+
+        <div id="result-box" class="result-box hidden">
+            <h2>Your Footprint: <span id="co2-value">0</span> kg CO₂ / day</h2>
+            <p id="feedback-text"></p>
+        </div>
+    </div>
+
+    <script>
+        // --- यहाँ आपका पूरा JavaScript (लॉजिक) है ---
+        function calculateCarbon() {
+            var transport = parseFloat(document.getElementById('transport').value) || 0;
+            var electricity = parseFloat(document.getElementById('electricity').value) || 0;
+            var meals = parseFloat(document.getElementById('meals').value) || 0;
+
+            var transportFactor = 0.21;  
+            var electricityFactor = 0.82; 
+            var mealsFactor = 2.5;       
+
+            var totalCO2 = (transport * transportFactor) + 
+                           (electricity * electricityFactor) + 
+                           (meals * mealsFactor);
+
+            document.getElementById('co2-value').innerText = totalCO2.toFixed(2);
+
+            var feedbackText = document.getElementById('feedback-text');
+            if (totalCO2 < 5) {
+                feedbackText.innerText = "Excellent! Your daily footprint is low. Keep practicing sustainable habits.";
+                feedbackText.style.color = "#2d6a4f";
+            } else if (totalCO2 >= 5 && totalCO2 <= 15) {
+                feedbackText.innerText = "Moderate footprint. Consider carpooling or switching to energy-efficient appliances.";
+                feedbackText.style.color = "#e65100";
+            } else {
+                feedbackText.innerText = "High environmental footprint! Try reducing meat consumption and utilizing public transit.";
+                feedbackText.style.color = "#b71c1c";
+            }
+
+            document.getElementById('result-box').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
